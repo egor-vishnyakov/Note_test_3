@@ -57,8 +57,6 @@ class MyNote(Frame):
 
     def open_note(self, event=None):
         self.cur_id = self.tree.get_cur_id()
-        # readed_text = self.storage.get_note_text(self.cur_id)
-        # self.text.settext(readed_text)
         note_data = self.storage.get_note_data(self.cur_id)
         self.text.settext(note_data.text)
         self.set_name(note_data.get_name())
@@ -67,11 +65,18 @@ class MyNote(Frame):
         self.storage.write_note(self.cur_id, self.text.gettext(), self.get_name())
 
     def add_note(self, event=None):
-        self.cur_id = self.storage.add_new_note('new_note')
+        self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
         self.text.settext(self.storage.get_note_text(self.cur_id))
 
+    def add_folder(self):
+        # self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id(), True)
+        pass
+
     def make_structure(self):
-        return self.storage.get_storage_structure()
+        # return self.storage.get_storage_structure()
+        temp = self.storage.get_storage_structure()
+        print('temp: ', temp)
+        return temp
 
     def get_name(self):
         return self.name_entry.get()

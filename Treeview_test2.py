@@ -45,16 +45,27 @@ class NoteTreeView(ttk.Frame):
             if is_folder:
                 self.folders_id[item_id] = row
 
+            print('parent: ', parent, 'id: ', item_id, 'name: ', line.get('name'))
+
         print(self.folders_id)
 
+    def get_id(self, line):
+        return self.treeview.set(line, column='id')
+
     def get_cur_id(self):
-        return self.treeview.set(self.treeview.focus(), column='id')
+        return self.get_id(self.treeview.focus())
 
     def get_cur_data(self):
         return self.treeview.set(self.treeview.focus())
 
     def get_cur_raw(self):
         return self.treeview.item(self.treeview.focus())
+
+    def get_cur_parent_id(self):
+        return self.get_parent_id(self.treeview.focus())
+
+    def get_parent_id(self, line_id):
+        return self.get_id(self.treeview.parent(line_id))
 
 
 if __name__ == '__main__':

@@ -14,6 +14,8 @@ MY_NAME = 'name'
 MY_GUID = 'GUID'
 MY_CREATE_DATE = 'create_date'
 MY_MODIF_DATE = 'modif_date'
+MY_IS_FOLDER = 'is_folder'
+MY_PARENT_ID = 'parent_id'
 
 
 class Title:
@@ -49,6 +51,20 @@ class Title:
 
     def set_modif_date(self, new_date):
         self.line[MY_MODIF_DATE] = new_date
+
+    def get_is_folder(self):
+        # return self.line[MY_IS_FOLDER]
+        return self.line.get(MY_IS_FOLDER, None)
+
+    def set_is_folder(self, new_is_folder):
+        self.line[MY_IS_FOLDER] = new_is_folder
+
+    def get_parent_id(self):
+        # return self.line[MY_PARENT_ID]
+        return self.line.get(MY_PARENT_ID, None)
+
+    def set_parent_id(self, new_parent_id):
+        self.line[MY_PARENT_ID] = new_parent_id
 
 
 class Titles:
@@ -103,21 +119,25 @@ class Storage:
 
         return self._inner_get_note_text(note_data)
 
-    def search_note(self, id):
+    def search_note(self, note_id):
         titles = self.read_titles()
+
         for title in titles:
-            if title.get_guid() == id:
+            if title.get_guid() == note_id:
                 return title
 
         return {}
+
+    def _inner_write_note(self, note_data, text):
+        with open(self.get_filename(note_data), 'w') as f:
+            f.write(text + '\n')
 
     def write_note(self, note_id, text, name):
         note_data = self.search_note(note_id)
         note_data.set_name(name)
 
         if note_data:
-            with open(self.get_filename(note_data), 'w') as f:
-                f.write(text + '\n')
+            self._inner_write_note(note_data, text)
         else:
             print('Error! No filename')
 
@@ -133,23 +153,22 @@ class Storage:
 
             return titles
 
-    def add_new_note(self, name, text=''):
+    def add_new_note(self, name, text='', parent_id=None, is_folder=False):
         new_guid = uuid.uuid4().hex
-        new_note = self.append_name(name if name else new_guid, guid=new_guid)
+        self.append_name(name if name else new_guid, new_guid, is_folder, parent_id)
         self.write_note(new_guid, text, name)
 
         return new_guid
 
-    def append_name(self, name, guid=None):
+    def append_name(self, name, guid=None, parent_id=None, is_folder=False):
         with open(self.get_titles_name(), 'a', newline='\n') as f:
             writer = csv.DictWriter(f, delimiter=',', fieldnames=self.get_fieldnames())
-            # now = datetime.datetime.now()
-            # new_note = {MY_GUID: guid if guid else uuid.uuid4().hex, MY_NAME: name,
-            #             MY_CREATE_DATE: now, MY_MODIF_DATE: now}
 
             new_note = Title()
             new_note.set_guid(guid if guid else uuid.uuid4().hex)
             new_note.set_name(name)
+            new_note.set_is_folder(is_folder)
+            new_note.set_parent_id(parent_id)
 
             writer.writerow(new_note.get_dict())
             return new_note
@@ -213,7 +232,24 @@ class Storage:
 
         return {}
 
-    def get_storage_structure(self, storage_dir=STORAGE_FOLDER, parent_id=None):
+    def get_storage_structure(self):
+        titles = self.read_titles()
+
+        # test_list.append({'folder': True, 'name': 'folder1', 'parent': None, 'id': 1})
+
+        def map_dict(title):
+            res = dict()
+            res['folder'] = title.get_is_folder()
+            res['name'] = title.get_name()
+            res['parent'] = title.get_parent_id()
+            res['id'] = title.get_guid()
+            return res
+
+        structure = list(map(map_dict, titles)) # [title.get_dict() for title in titles]
+
+        return structure
+
+    def get_storage_structure2(self, storage_dir=STORAGE_FOLDER, parent_id=None):
         titles = self.read_titles()
 
         structure = list()
@@ -222,7 +258,7 @@ class Storage:
             full_path = os.path.join(STORAGE_FOLDER, filename)
             item_id = os.path.splitext(filename)[0]   # it's must be ID
 
-            note_data = self._search_guid_in_data(titles, item_id);
+            note_data = self._search_guid_in_data(titles, item_id)
             if note_data != {}:
                 item_name = note_data.get_name()
             else:
