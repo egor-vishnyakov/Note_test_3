@@ -213,7 +213,7 @@ class Storage:
         return self.folder + '/' + TITLES_FILE
 
     def get_fieldnames(self):
-        return [MY_GUID, MY_NAME, MY_CREATE_DATE, MY_MODIF_DATE]
+        return [MY_GUID, MY_NAME, MY_CREATE_DATE, MY_MODIF_DATE, MY_IS_FOLDER, MY_PARENT_ID]
 
     def search_name(self, name):
         titles = self.read_titles()
