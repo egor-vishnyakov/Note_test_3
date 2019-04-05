@@ -36,6 +36,11 @@ class NoteTreeView(ttk.Frame):
         if not structure:
             return
 
+        # children = self.treeview.get_children()
+        # if len(children) > 0:
+        for child in self.treeview.get_children():
+            self.treeview.delete(child)
+
         for line in structure:
             parent = line.get('parent')
             item_id = line.get('id', '')

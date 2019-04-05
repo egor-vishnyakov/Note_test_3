@@ -63,9 +63,11 @@ class MyNote(Frame):
 
     def save_note(self, event=None):
         self.storage.write_note(self.cur_id, self.text.gettext(), self.get_name())
+        self.refresh_notes()
 
     def add_note(self, event=None):
         self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
+        self.refresh_notes()
         self.text.settext(self.storage.get_note_text(self.cur_id))
 
     def add_folder(self):
@@ -77,6 +79,9 @@ class MyNote(Frame):
         temp = self.storage.get_storage_structure()
         print('temp: ', temp)
         return temp
+
+    def refresh_notes(self):
+        self.tree.set_tree(self.make_structure())
 
     def get_name(self):
         return self.name_entry.get()
