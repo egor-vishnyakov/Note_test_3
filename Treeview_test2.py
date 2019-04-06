@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 
 
+TREE_FOLDER = 'folder'
+TREE_PARENT = 'parent'
+TREE_ID = 'id'
+TREE_NAME = 'name'
+
+
 class NoteTreeView(ttk.Frame):
     def __init__(self, parent=None, structure=None):
         ttk.Frame.__init__(self, parent)
@@ -25,12 +31,12 @@ class NoteTreeView(ttk.Frame):
         self.config_tree()
 
     def config_tree(self):
-        self.treeview['columns'] = 'id'
+        self.treeview['columns'] = TREE_ID
         self.treeview.column('#0', width=250, minwidth=250, stretch=tk.NO)
-        self.treeview.column('id', width=0, minwidth=0, stretch=tk.NO)
+        self.treeview.column(TREE_ID, width=0, minwidth=0, stretch=tk.NO)
 
         self.treeview.heading('#0', text='Блокноты', anchor=tk.CENTER)
-        self.treeview.heading('id', text='ID', anchor=tk.CENTER)
+        self.treeview.heading(TREE_ID, text=TREE_ID, anchor=tk.CENTER)
 
     def set_tree(self, structure):
         if not structure:
@@ -42,20 +48,20 @@ class NoteTreeView(ttk.Frame):
             self.treeview.delete(child)
 
         for line in structure:
-            parent = line.get('parent')
-            item_id = line.get('id', '')
+            parent = line.get(TREE_PARENT)
+            item_id = line.get(TREE_ID, '')
             row = self.treeview.insert(self.folders_id.get(parent if parent else '', ''), 'end', '',
-                                       text=line.get('name'), values=item_id)
-            is_folder = line.get('folder')
+                                       text=line.get(TREE_NAME), values=item_id)
+            is_folder = line.get(TREE_FOLDER)
             if is_folder:
                 self.folders_id[item_id] = row
 
-            print('parent: ', parent, 'id: ', item_id, 'name: ', line.get('name'))
+            print('parent: ', parent, 'id: ', item_id, 'name: ', line.get(TREE_NAME))
 
         print(self.folders_id)
 
     def get_id(self, line):
-        return self.treeview.set(line, column='id')
+        return self.treeview.set(line, column=TREE_ID)
 
     def get_cur_id(self):
         return self.get_id(self.treeview.focus())
@@ -75,27 +81,27 @@ class NoteTreeView(ttk.Frame):
 
 if __name__ == '__main__':
     test_list = list()
-    test_list.append({'folder': True, 'name': 'folder1', 'parent': None, 'id': 1})
-    test_list.append({'folder': False, 'name': 'note1', 'parent': 1, 'id': 2})
-    test_list.append({'folder': False, 'name': 'note2', 'parent': 1, 'id': 3})
-    test_list.append({'folder': False, 'name': 'note3', 'parent': 1, 'id': 4})
+    test_list.append({TREE_FOLDER: True, TREE_NAME: 'folder1', TREE_PARENT: None, TREE_ID: 1})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note1', TREE_PARENT: 1, TREE_ID: 2})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note2', TREE_PARENT: 1, TREE_ID: 3})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note3', TREE_PARENT: 1, TREE_ID: 4})
 
-    test_list.append({'folder': True, 'name': 'folder2', 'parent': 1, 'id': 5})
-    test_list.append({'folder': False, 'name': 'note4', 'parent': 5, 'id': 6})
-    test_list.append({'folder': False, 'name': 'note5', 'parent': 5, 'id': 7})
-    test_list.append({'folder': False, 'name': 'note6', 'parent': 5, 'id': 8})
+    test_list.append({TREE_FOLDER: True, TREE_NAME: 'folder2', TREE_PARENT: 1, TREE_ID: 5})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note4', TREE_PARENT: 5, TREE_ID: 6})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note5', TREE_PARENT: 5, TREE_ID: 7})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note6', TREE_PARENT: 5, TREE_ID: 8})
 
-    test_list.append({'folder': True, 'name': 'folder3', 'parent': None, 'id': 9})
-    test_list.append({'folder': False, 'name': 'note7', 'parent': 9, 'id': 10})
-    test_list.append({'folder': False, 'name': 'note8', 'parent': 9, 'id': 11})
-    test_list.append({'folder': False, 'name': 'note9', 'parent': 9, 'id': 12})
+    test_list.append({TREE_FOLDER: True, TREE_NAME: 'folder3', TREE_PARENT: None, TREE_ID: 9})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note7', TREE_PARENT: 9, TREE_ID: 10})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note8', TREE_PARENT: 9, TREE_ID: 11})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note9', TREE_PARENT: 9, TREE_ID: 12})
 
-    test_list.append({'folder': True, 'name': 'folder4', 'parent': None, 'id': 13})
-    test_list.append({'folder': False, 'name': 'note10', 'parent': 13, 'id': 14})
-    test_list.append({'folder': False, 'name': 'note11', 'parent': 13, 'id': 15})
-    test_list.append({'folder': False, 'name': 'note12', 'parent': 13, 'id': 16})
+    test_list.append({TREE_FOLDER: True, TREE_NAME: 'folder4', TREE_PARENT: None, TREE_ID: 13})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note10', TREE_PARENT: 13, TREE_ID: 14})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note11', TREE_PARENT: 13, TREE_ID: 15})
+    test_list.append({TREE_FOLDER: False, TREE_NAME: 'note12', TREE_PARENT: 13, TREE_ID: 16})
 
-    test_list.append({'name': 'note13', 'parent': None})
+    test_list.append({TREE_NAME: 'note13', TREE_PARENT: None})
 
     root = tk.Tk()
     ntv = NoteTreeView(structure=test_list)
