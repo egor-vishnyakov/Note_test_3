@@ -3,11 +3,11 @@ import csv
 import datetime
 from dateutil import parser
 import uuid
+from file_storage import FileStorage as FST
 
 
 TITLES_FILE = 'titles.csv'
 STORAGE_FOLDER = 'storage'
-EXTENT = '.txt'
 QUIT_PHRASE = 'QUIT!'
 
 MY_NAME = 'name'
@@ -99,25 +99,19 @@ class Titles:
 class Storage:
     def __init__(self, folder=STORAGE_FOLDER):
         self.folder = folder
+        self.storage = FST(self.folder);
 
     def get_note_data(self, note_id):
         note_data = self.search_note(note_id)
-        note_text = self._inner_get_note_text(note_data)
+        note_text = self.storage.get_note_text(note_data.get_guid())
         note_data.text = note_text
 
         return note_data
 
-    def _inner_get_note_text(self, note_data):
-        try:
-            with open(self.get_filename(note_data), 'r') as f:
-                return f.read()
-        except FileNotFoundError:
-            print(f'Заметка "{note_data.get_name()}" не существует')
-
     def get_note_text(self, note_id):
         note_data = self.search_note(note_id)
 
-        return self._inner_get_note_text(note_data)
+        return self.storage.get_note_text(note_data.get_guid())
 
     def search_note(self, note_id):
         titles = self.read_titles()
@@ -128,16 +122,12 @@ class Storage:
 
         return {}
 
-    def _inner_write_note(self, note_data, text):
-        with open(self.get_filename(note_data), 'w') as f:
-            f.write(text + '\n')
-
     def write_note(self, note_id, text, name):
         note_data = self.search_note(note_id)
         note_data.set_name(name)
 
         if note_data:
-            self._inner_write_note(note_data, text)
+            self.storage.set_note_text(note_data.get_guid(), text)
         else:
             print('Error! No filename')
 
@@ -203,11 +193,6 @@ class Storage:
                     print('GUID deleted')
                 else:
                     writer.writerow(line)
-
-    def get_filename(self, note_data):
-        # return STORAGE_FOLDER + '/' + note_data[MY_GUID] + EXTENT
-        # return STORAGE_FOLDER + '/' + note_data.get(MY_GUID, 'NONE') + EXTENT
-        return self.folder + '/' + note_data.get_guid() + EXTENT
 
     def get_titles_name(self):
         return self.folder + '/' + TITLES_FILE
