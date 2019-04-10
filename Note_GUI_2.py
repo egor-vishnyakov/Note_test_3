@@ -52,6 +52,7 @@ class MyNote(Frame):
         self.text = text
 
     def make_binds(self):
+        # self.tree.bind('<Double-Button-1>', self.open_note())
         pass
         # self.tree.bind('<Control-o>', self.open_note)
         # self.text.bind('<Control-s>', self.save_note) #not here, text capture keys
@@ -107,7 +108,7 @@ if __name__ == '__main__':
     def get_struct(event):
         mn.make_structure()
 
-    # root.bind('<space>', open_note)
+    root.bind('<Control-o>', open_note)
     root.bind('<Control-s>', save_note)
     # root.bind('<Control-ы>', save_note)
     root.bind('<Control-m>', get_struct)
