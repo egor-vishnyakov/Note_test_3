@@ -55,6 +55,10 @@ class Storage:
 
         return new_guid
 
+    def delete_note(self, note_id):
+        self.note_titles.delete_name(note_id)
+        self.storage.delete_note(note_id)
+
     def _search_guid_in_data(self, data, guid):
         for title in data:
             if title.get_guid() == guid:

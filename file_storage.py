@@ -1,3 +1,5 @@
+import os
+
 EXTENT = '.txt'
 
 
@@ -18,3 +20,6 @@ class FileStorage:
 
     def get_filename(self, note_id):
         return self.folder + '/' + note_id + EXTENT
+
+    def delete_note(self, note_id):
+        os.remove(self.get_filename(note_id))

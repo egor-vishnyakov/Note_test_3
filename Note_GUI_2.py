@@ -40,6 +40,9 @@ class MyNote(Frame):
         btn3 = Button(frame_btn, text='Add', command=self.add_note)
         btn3.pack(side=LEFT)
 
+        btn4 = Button(frame_btn, text='Delete', command=self.delete_note)
+        btn4.pack(side=RIGHT)
+
         frame_text = Frame(self)
         frame_text.pack(fill=BOTH, side=RIGHT)
 
@@ -52,8 +55,8 @@ class MyNote(Frame):
         self.text = text
 
     def make_binds(self):
-        # self.tree.bind('<Double-Button-1>', self.open_note())
-        pass
+        self.tree.bind('<Double-Button-1>', self.open_note())
+        # pass
         # self.tree.bind('<Control-o>', self.open_note)
         # self.text.bind('<Control-s>', self.save_note) #not here, text capture keys
 
@@ -70,8 +73,11 @@ class MyNote(Frame):
     def add_note(self, event=None):
         self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
         self.refresh_notes()
-        # self.text.settext(self.storage.get_note_text(self.cur_id))
         self.open_note(self.cur_id)
+
+    def delete_note(self, event=None):
+        self.storage.delete_note(self.tree.get_cur_id())
+        self.refresh_notes()
 
     def add_folder(self):
         # self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id(), True)
@@ -112,4 +118,5 @@ if __name__ == '__main__':
     root.bind('<Control-s>', save_note)
     # root.bind('<Control-ы>', save_note)
     root.bind('<Control-m>', get_struct)
+    root.bind('<Double-Button-1>', open_note)
     root.mainloop()

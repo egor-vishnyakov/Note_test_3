@@ -16,7 +16,7 @@ class NoteTreeView(ttk.Frame):
         self.pack(expand=tk.YES, fill=tk.Y)
         self.make_widgets()
         self.set_tree(structure)
-        self.set_selection(self.treeview.get_children()[0])
+        self.set_selection_first()
 
     def make_widgets(self):
         sbar = tk.Scrollbar(self)
@@ -64,6 +64,9 @@ class NoteTreeView(ttk.Frame):
     def set_selection(self, item):
         self.treeview.selection_set(item)
         self.treeview.focus(item)
+
+    def set_selection_first(self):
+        self.set_selection(self.treeview.get_children()[0])
 
 
     def get_id(self, line):

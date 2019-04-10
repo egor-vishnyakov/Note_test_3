@@ -121,7 +121,7 @@ class NoteTitles:
             return new_note
 
     def write_name(self, note_data):
-        titles = self.read_titles();
+        titles = self.read_titles()
 
         with open(self.get_titles_name(), 'w') as f:
             writer = csv.DictWriter(f, delimiter=',', fieldnames=get_fieldnames())
@@ -133,23 +133,18 @@ class NoteTitles:
                     title.set_name(note_data.get_name())
                 writer.writerow(title.get_dict())
 
-    def delete_name(self, note_data):
-        titles = []
-
-        with open(self.get_titles_name(), 'r') as f:
-            reader = csv.DictReader(f)
-            for line in reader:
-                titles.append(line)
+    def delete_name(self, note_id):
+        titles = self.read_titles()
 
         with open(self.get_titles_name(), 'w') as f:
             writer = csv.DictWriter(f, delimiter=',', fieldnames=get_fieldnames())
             writer.writeheader()
 
-            for line in titles:
-                if line[MY_GUID] == note_data[MY_GUID]:
+            for title in titles:
+                if title.get_guid() == note_id:
                     print('GUID deleted')
                 else:
-                    writer.writerow(line)
+                    writer.writerow(title.get_dict())
 
     def search_name(self, name):
         titles = self.read_titles()
