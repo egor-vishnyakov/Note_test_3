@@ -52,11 +52,12 @@ class MyNote(Frame):
         self.text = text
 
     def make_binds(self):
-        self.tree.bind('<Control-o>', self.open_note)
+        pass
+        # self.tree.bind('<Control-o>', self.open_note)
         # self.text.bind('<Control-s>', self.save_note) #not here, text capture keys
 
-    def open_note(self, event=None):
-        self.cur_id = self.tree.get_cur_id()
+    def open_note(self, note_id=None):
+        self.cur_id = note_id if note_id else self.tree.get_cur_id()
         note_data = self.storage.get_note_data(self.cur_id)
         self.text.settext(note_data.text)
         self.set_name(note_data.get_name())
@@ -68,7 +69,8 @@ class MyNote(Frame):
     def add_note(self, event=None):
         self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
         self.refresh_notes()
-        self.text.settext(self.storage.get_note_text(self.cur_id))
+        # self.text.settext(self.storage.get_note_text(self.cur_id))
+        self.open_note(self.cur_id)
 
     def add_folder(self):
         # self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id(), True)
