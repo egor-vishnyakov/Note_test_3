@@ -59,6 +59,14 @@ class Storage:
         self.note_titles.delete_name(note_id)
         self.storage.delete_note(note_id)
 
+    # self.storage.add_new_folder('new_fodler', self.tree.get_cur_parent_id())
+    def add_new_folder(self, name, parent_id=None):
+        new_guid = uuid.uuid4().hex
+        self.note_titles.append_name(name if name else new_guid, new_guid, True, parent_id)
+        self.storage.add_folder(new_guid)
+
+        return new_guid
+
     def _search_guid_in_data(self, data, guid):
         for title in data:
             if title.get_guid() == guid:

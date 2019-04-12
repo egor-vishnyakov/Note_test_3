@@ -24,23 +24,29 @@ class MyNote(Frame):
         # notes_listbox.pack(expand=YES, fill=BOTH, side=TOP)
         # self.list_notes = notes_listbox
 
+        frame_btn_folder = Frame(frame1)
+        frame_btn_folder.pack(fill=X, side=TOP)
+
+        btn_f1 = Button(frame_btn_folder, text='Add', command=self.add_folder)
+        btn_f1.pack(side=LEFT)
+
         ntv = NTV(frame1, structure=self.make_structure())
         ntv.pack(expand=YES, fill=Y, side=TOP)
         self.tree = ntv
 
-        frame_btn = Frame(frame1)
-        frame_btn.pack(fill=X, side=BOTTOM)
+        frame_btn_note = Frame(frame1)
+        frame_btn_note.pack(fill=X, side=BOTTOM)
 
-        btn1 = Button(frame_btn, text='Open', command=self.open_note)
+        btn1 = Button(frame_btn_note, text='Open', command=self.open_note)
         btn1.pack(side=LEFT)
 
-        btn2 = Button(frame_btn, text='Save', command=self.save_note)
+        btn2 = Button(frame_btn_note, text='Save', command=self.save_note)
         btn2.pack(side=RIGHT)
 
-        btn3 = Button(frame_btn, text='Add', command=self.add_note)
+        btn3 = Button(frame_btn_note, text='Add', command=self.add_note)
         btn3.pack(side=LEFT)
 
-        btn4 = Button(frame_btn, text='Delete', command=self.delete_note)
+        btn4 = Button(frame_btn_note, text='Delete', command=self.delete_note)
         btn4.pack(side=RIGHT)
 
         frame_text = Frame(self)
@@ -80,8 +86,9 @@ class MyNote(Frame):
         self.refresh_notes()
 
     def add_folder(self):
-        # self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id(), True)
-        pass
+        self.cur_id = self.storage.add_new_folder('new_fodler', self.tree.get_cur_parent_id())
+        self.refresh_notes()
+        # self.open_note(self.cur_id)
 
     def make_structure(self):
         # return self.storage.get_storage_structure()
