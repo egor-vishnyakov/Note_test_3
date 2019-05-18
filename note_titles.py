@@ -12,7 +12,7 @@ MY_PARENT_ID = 'parent_id'
 
 
 def get_fieldnames():
-    return [MY_GUID, MY_NAME, MY_CREATE_DATE, MY_MODIF_DATE, MY_IS_FOLDER, MY_PARENT_ID]
+    return [MY_GUID, MY_NAME, MY_CREATE_DATE, MY_MODIF_DATE, MY_PARENT_ID, MY_IS_FOLDER]
 
 
 class Title:

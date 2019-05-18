@@ -50,8 +50,12 @@ class Storage:
 
     def add_new_note(self, name, text='', parent_id=None, is_folder=False):
         print('name: ', name, 'text: ', text, 'parent_id: ', parent_id, 'is_folder: ', is_folder)
+
+        note_data = self.note_titles.search_note(parent_id)
+        print('is parent folder: ', note_data.get_is_folder())
+
         new_guid = uuid.uuid4().hex
-        self.note_titles.append_name(name if name else new_guid, new_guid, is_folder, parent_id)
+        self.note_titles.append_name(name if name else new_guid, new_guid, parent_id if note_data.get_is_folder() else None, is_folder)
         self.write_note(new_guid, text, name)
 
         return new_guid
