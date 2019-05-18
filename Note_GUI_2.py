@@ -27,7 +27,7 @@ class MyNote(Frame):
         frame_btn_folder = Frame(frame1)
         frame_btn_folder.pack(fill=X, side=TOP)
 
-        btn_f1 = Button(frame_btn_folder, text='Add', command=self.add_folder)
+        btn_f1 = Button(frame_btn_folder, text='AddF', command=self.add_folder)
         btn_f1.pack(side=LEFT)
 
         ntv = NTV(frame1, structure=self.make_structure())
@@ -43,7 +43,7 @@ class MyNote(Frame):
         btn2 = Button(frame_btn_note, text='Save', command=self.save_note)
         btn2.pack(side=RIGHT)
 
-        btn3 = Button(frame_btn_note, text='Add', command=self.add_note)
+        btn3 = Button(frame_btn_note, text='AddN', command=self.add_note)
         btn3.pack(side=LEFT)
 
         btn4 = Button(frame_btn_note, text='Delete', command=self.delete_note)
@@ -77,7 +77,8 @@ class MyNote(Frame):
         self.refresh_notes()
 
     def add_note(self, event=None):
-        self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
+        # self.cur_id = self.storage.add_new_note('new_note', self.tree.get_cur_parent_id())
+        self.cur_id = self.storage.add_new_note('new_note', parent_id=self.tree.get_cur_id())
         self.refresh_notes()
         self.open_note(self.cur_id)
 
@@ -91,10 +92,7 @@ class MyNote(Frame):
         # self.open_note(self.cur_id)
 
     def make_structure(self):
-        # return self.storage.get_storage_structure()
-        temp = self.storage.get_storage_structure()
-        print('temp: ', temp)
-        return temp
+        return self.storage.get_storage_structure()
 
     def refresh_notes(self):
         self.tree.set_tree(self.make_structure())

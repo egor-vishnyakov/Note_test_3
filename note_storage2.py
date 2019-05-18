@@ -49,6 +49,7 @@ class Storage:
         self.note_titles.write_name(note_data)
 
     def add_new_note(self, name, text='', parent_id=None, is_folder=False):
+        print('name: ', name, 'text: ', text, 'parent_id: ', parent_id, 'is_folder: ', is_folder)
         new_guid = uuid.uuid4().hex
         self.note_titles.append_name(name if name else new_guid, new_guid, is_folder, parent_id)
         self.write_note(new_guid, text, name)

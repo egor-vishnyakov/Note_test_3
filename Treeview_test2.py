@@ -49,6 +49,7 @@ class NoteTreeView(ttk.Frame):
             self.treeview.delete(child)
 
         for line in structure:
+            # print('line: ', line)
             parent = line.get(TREE_PARENT)
             item_id = line.get(TREE_ID, '')
             row = self.treeview.insert(self.folders_id.get(parent if parent else '', ''), 'end', '',
@@ -57,9 +58,9 @@ class NoteTreeView(ttk.Frame):
             if is_folder:
                 self.folders_id[item_id] = row
 
-            print('parent: ', parent, 'id: ', item_id, 'name: ', line.get(TREE_NAME))
+            # print('parent: ', parent, 'id: ', item_id, 'name: ', line.get(TREE_NAME))
 
-        print(self.folders_id)
+        # print(self.folders_id)
 
     def set_selection(self, item):
         self.treeview.selection_set(item)
@@ -67,7 +68,6 @@ class NoteTreeView(ttk.Frame):
 
     def set_selection_first(self):
         self.set_selection(self.treeview.get_children()[0])
-
 
     def get_id(self, line):
         return self.treeview.set(line, column=TREE_ID)
@@ -86,6 +86,10 @@ class NoteTreeView(ttk.Frame):
 
     def get_parent_id(self, line_id):
         return self.get_id(self.treeview.parent(line_id))
+
+    def is_cur_folder(self):
+        print('get_cur_raw:', self.get_cur_raw())
+        # return self.is_folder(self.treeview.focus())
 
 
 if __name__ == '__main__':
